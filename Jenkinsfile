@@ -17,14 +17,14 @@ pipeline {
 
         stage('Start Application') {
             steps {
-                bat 'start /B java -cp target\\classes com.expensetracker.ExpenseTracker'
+                bat 'start /B java -Dserver.port=8083 -cp target\\classes com.expensetracker.ExpenseTracker'
                 sleep 5
             }
         }
 
         stage('Selenium Test') {
             steps {
-                bat 'mvn test'
+                bat 'mvn test -Dapp.url=http://localhost:8083'
             }
         }
 

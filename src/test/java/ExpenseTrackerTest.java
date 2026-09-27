@@ -26,22 +26,32 @@ public class ExpenseTrackerTest {
     @Test
     void testAddExpense() {
 
-        driver.get("http://localhost:8081");
+        String appUrl = System.getProperty(
+                "app.url",
+                "http://localhost:8081"
+        );
 
-        driver.findElement(By.id("description"))
-                .sendKeys("Selenium Test Expense");
+        driver.get(appUrl);
 
-        driver.findElement(By.id("amount"))
-                .sendKeys("500");
+        driver.findElement(
+                By.id("description")
+        ).sendKeys("Selenium Test Expense");
 
-        driver.findElement(By.id("category"))
-                .click();
+        driver.findElement(
+                By.id("amount")
+        ).sendKeys("500");
 
-        driver.findElement(By.xpath("//option[text()='Travel']"))
-                .click();
+        driver.findElement(
+                By.id("category")
+        ).click();
 
-        driver.findElement(By.id("addExpense"))
-                .click();
+        driver.findElement(
+                By.xpath("//option[text()='Travel']")
+        ).click();
+
+        driver.findElement(
+                By.id("addExpense")
+        ).click();
 
         String pageText = driver.getPageSource();
 
