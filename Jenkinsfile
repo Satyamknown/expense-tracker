@@ -44,7 +44,7 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-                    bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
+                    bat 'powershell -NoProfile -Command "$env:DOCKER_PASSWORD | docker login -u $env:DOCKER_USERNAME --password-stdin"'
                     bat 'docker push satyam222006/expense-tracker:%BUILD_NUMBER%'
                     bat 'docker push satyam222006/expense-tracker:latest'
                 }
