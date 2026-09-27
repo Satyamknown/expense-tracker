@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -29,17 +28,37 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t satyam222006/expense-tracker:%BUILD_NUMBER% .'
+                bat 'docker tag satyam222006/expense-tracker:%BUILD_NUMBER% satyam222006/expense-tracker:latest'
+            }
+        }
+
+        stage('Docker Hub Push') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )
+                ]) {
+                    bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
+                    bat 'docker push satyam222006/expense-tracker:%BUILD_NUMBER%'
+                    bat 'docker push satyam222006/expense-tracker:latest'
+                }
+            }
+        }
     }
 
     post {
-
         success {
-            echo 'Expense Tracker pipeline completed successfully!'
+            echo 'Expense Tracker DevOps pipeline completed successfully!'
         }
 
         failure {
             echo 'Pipeline failed. Check the console output.'
         }
-
     }
 }
