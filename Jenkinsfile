@@ -5,13 +5,21 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out Expense Tracker project...'
+                checkout scm
             }
         }
 
         stage('Maven Build') {
             steps {
                 bat 'mvn clean package'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    bat 'mvn sonar:sonar'
+                }
             }
         }
 
